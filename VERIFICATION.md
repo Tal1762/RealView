@@ -9,6 +9,7 @@ Verification performed on Windows 11 x64 (build 26200), Node.js 24.14.1, Electro
 | Strict renderer/main/preload TypeScript compilation | Passed |
 | Production Vite and Electron bundles | Passed |
 | Vite/Electron development launch | Passed with synthetic camera and local MediaPipe inference; dev-only CSP nonce permits the React refresh preamble |
+| Small-window scrolling | Passed: mouse wheel scrolls library, workspace and inspector at 1120×700; bottom inspector actions and dialog controls are reachable (`node scripts/smoke-scroll.mjs`) |
 | ESLint | Passed |
 | Vitest critical logic | 15 tests passed |
 | Synthetic-camera Electron integration | Passed; see the latest generated `test-results/smoke.json` |
