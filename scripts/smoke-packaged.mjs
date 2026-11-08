@@ -1,0 +1,34 @@
+import { _electron as electron } from '@playwright/test';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import assert from 'node:assert/strict';
+const profile = resolve('.local-test', `packaged-${Date.now()}`);
+await mkdir('test-results', { recursive: true });
+const env = { ...process.env }; delete env.ELECTRON_RUN_AS_NODE;
+const app = await electron.launch({ executablePath: resolve('release/win-unpacked/RoomShift.exe'), args: [`--user-data-dir=${profile}`, '--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'], env });
+try {
+  const errors = [], page = await app.firstWindow();
+  page.on('pageerror', e => errors.push(e.message));
+  await page.getByRole('heading', { name: 'Room studio' }).waitFor();
+  await page.getByText('LIVE PREVIEW', { exact: true }).waitFor({ timeout: 30000 });
+  await page.getByText('Occlusion active', { exact: true }).waitFor({ timeout: 60000 });
+  const details = await app.evaluate(({ app }) => ({ packaged: app.isPackaged, name: app.getName(), userData: app.getPath('userData') }));
+  assert.equal(details.packaged, true); assert.equal(details.userData.toLowerCase(), profile.toLowerCase());
+  await page.getByRole('button', { name: 'Try an example room' }).click();
+  await page.locator('.layer').nth(2).waitFor();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await page.getByText(/saved on this device/).waitFor();
+  const room = await page.evaluate(async () => { const entries = await window.roomshift.listScenes(); return window.roomshift.loadScene(entries.scenes[0].id); });
+  assert.equal(room.scene.objects.length, 3);
+  await page.getByRole('button', { name: 'Go live' }).click();
+  const nextWindow = app.waitForEvent('window'); await page.getByRole('button', { name: 'Open output window' }).click();
+  const output = await nextWindow;
+  await output.waitForFunction(() => document.querySelector('video')?.readyState >= 2);
+  await page.getByText('Output live', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Close dialog' }).click();
+  await page.getByRole('button', { name: 'Dismiss notification' }).click();
+  await page.screenshot({ path: 'test-results/packaged.png' });
+  assert.deepEqual(errors, []);
+  await writeFile('test-results/packaged.json', JSON.stringify({ passed: true, ...details, syntheticCamera: true, checks: ['packaged executable launch', 'bundled MediaPipe inference', 'example scene', 'scene persistence', 'clean video output'] }, null, 2));
+  console.log('Packaged Windows executable smoke checks passed.');
+} finally { await app.close(); }

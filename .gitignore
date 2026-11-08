@@ -1,0 +1,10 @@
+node_modules/
+dist/
+dist-electron/
+release/
+test-results/
+.local-test/
+public/assets/mediapipe/
+public/assets/segmentation-worker.js
+public/assets/licenses/
+*.log

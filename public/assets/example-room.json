@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "id": "9674e075-d2b3-4116-8fd8-e23fffe49653",
+  "name": "Coastal studio",
+  "createdAt": "2026-11-08T00:00:00.000Z",
+  "modifiedAt": "2026-11-08T00:00:00.000Z",
+  "camera": { "deviceId": "", "mirrorPreview": true, "mirrorOutput": false, "fov": 50 },
+  "output": { "width": 1280, "height": 720, "fps": 30, "segmentation": true, "quality": "balanced" },
+  "objects": [
+    { "id": "3667ba20-8c89-4bda-81d7-9d3b9541ddad", "name": "Slow living", "kind": "poster", "asset": "builtin:art", "visible": true, "opacity": 1, "corners": [[0.68,0.16],[0.86,0.18],[0.85,0.65],[0.69,0.63]], "frameColor": "#e3dbcd", "frameWidth": 0 },
+    { "id": "7e53e591-a6db-4083-a5a1-3ddf9e7c3062", "name": "Coastal escape", "kind": "window", "asset": "builtin:coast", "visible": true, "opacity": 1, "corners": [[0.1,0.14],[0.38,0.19],[0.37,0.59],[0.11,0.63]], "frameColor": "#e3dbcd", "frameWidth": 0.035 },
+    { "id": "d5a34bde-66b7-4b0d-9ad5-049f74c49d55", "name": "Desk plant", "kind": "model", "asset": "builtin:plant", "visible": true, "opacity": 1, "position": [0.8,-0.6,-3], "rotation": [0,0,0], "scale": [0.7,0.7,0.7] }
+  ]
+}
